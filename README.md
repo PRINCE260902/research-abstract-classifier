@@ -1,5 +1,7 @@
 # Research Abstract Classifier
-
+🚀 Live Demo  : [Open the Live App](https://research-abstract-classifier-prince-chauhan.streamlit.app/)
+Try the Research Abstract Classifier online: Open the Live App
+Enter a research abstract to predict whether it belongs to Science, Business, or Social Science.
 ## Project Overview
 A machine learning and Natural Language Processing (NLP) project that classifies research abstracts into three categories: Science, Business, and Social Science.
 
