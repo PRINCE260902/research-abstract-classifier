@@ -1,11 +1,19 @@
 # Research Abstract Classifier
-🚀 Live Demo  : [Open the Live App](https://research-abstract-classifier-prince-chauhan.streamlit.app/)
-Try the Research Abstract Classifier online: Open the Live App
-Enter a research abstract to predict whether it belongs to Science, Business, or Social Science.
-## Project Overview
-A machine learning and Natural Language Processing (NLP) project that classifies research abstracts into three categories: Science, Business, and Social Science.
 
-## Dataset
+A machine learning and Natural Language Processing (NLP) project that classifies research abstracts into **Science, Business, and Social Science** categories.
+
+## 🚀 Live Demo
+
+**[Open the Research Abstract Classifier](https://research-abstract-classifier-prince-chauhan.streamlit.app/)**
+
+Try the application online by entering a research abstract to predict its category and view the model's prediction scores.
+
+## 📌 Project Overview
+
+This project uses machine learning and TF-IDF text features to classify research abstracts into three subject categories.
+
+## 📊 Dataset
+
 The dataset was collected using the OpenAlex API and filtered using keyword-based checks.
 
 | Category | Number of Abstracts |
@@ -15,17 +23,20 @@ The dataset was collected using the OpenAlex API and filtered using keyword-base
 | Social Science | 367 |
 | **Total** | **1,090** |
 
-The records have not all been independently verified manually as peer-reviewed research.
+**Data quality note:** The records have not all been independently verified manually as peer-reviewed research.
 
-## Methodology
+## ⚙️ Methodology
+
 1. Collect research records using OpenAlex.
 2. Clean and filter the abstracts.
 3. Convert text into numerical features using TF-IDF.
-4. Train and evaluate six machine learning models.
-5. Select the best-performing model.
-6. Build a web application using Streamlit.
+4. Split the dataset into training and testing sets using an 80:20 split.
+5. Train and evaluate six machine learning models.
+6. Select the best-performing model.
+7. Deploy the application using Streamlit.
 
-## Machine Learning Models
+## 🤖 Machine Learning Models
+
 - Logistic Regression
 - Decision Tree
 - Multinomial Naive Bayes
@@ -33,53 +44,68 @@ The records have not all been independently verified manually as peer-reviewed r
 - Linear Support Vector Classifier (Linear SVC)
 - Random Forest
 
-## Results
+## 📈 Results
 
-The dataset was split into 80% training data and 20% testing data.
+The following test accuracies were obtained during model evaluation.
 
 | Model | Test Accuracy |
 |---|---:|
-| Random Forest | 97.25% |
+| Random Forest | **97.25%** |
 | Multinomial Naive Bayes | 96.33% |
 | Linear SVC | 94.50% |
 | Logistic Regression | 94.04% |
 | K-Nearest Neighbors | 93.12% |
 | Decision Tree | 91.74% |
 
-Random Forest achieved the highest test accuracy.
+Random Forest achieved the highest test accuracy among the evaluated models.
 
-**Limitation:** The high accuracy may partly reflect how the records were collected and labelled. Independent testing on manually labelled abstracts is needed to evaluate real-world performance.
+**Evaluation limitation:** The high accuracy may partly reflect how the records were collected and labelled. Testing on independently labelled abstracts is needed to better evaluate real-world performance.
 
-## Web Application
-The Streamlit application lets users paste a research abstract and view its predicted category and model prediction scores.
+## 💻 Run Locally
 
-## Run Locally
+### 1. Clone the repository
 
-Install the required dependencies:
+```bash
+git clone https://github.com/PRINCE260902/research-abstract-classifier.git
+cd research-abstract-classifier
+```
+
+### 2. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the application:
+### 3. Run the application
 
 ```bash
 streamlit run app.py
 ```
 
-## Repository Files
-- `app.py` — Streamlit application
-- `requirements.txt` — Required Python packages
-- `best_research_classifier.pkl` — Trained Random Forest model
-- `tfidf_vectorizer.pkl` — Saved TF-IDF vectorizer
+## 📁 Repository Files
 
-## Technologies Used
-Python, Pandas, Scikit-learn, TF-IDF, Joblib, OpenAlex API, and Streamlit.
+- `app.py` — Streamlit web application.
+- `requirements.txt` — Python dependencies.
+- `best_research_classifier.pkl` — Saved Random Forest model.
+- `tfidf_vectorizer.pkl` — Saved TF-IDF vectorizer.
 
-## Limitations
+## 🛠️ Technologies Used
+
+- Python
+- Pandas
+- Scikit-learn
+- TF-IDF
+- Joblib
+- OpenAlex API
+- Streamlit
+
+## ⚠️ Limitations
+
 - The model may misclassify some abstracts.
 - Some records may not be peer-reviewed research.
+- The high test accuracy may not reflect performance on all real-world abstracts.
 - Predictions should be reviewed rather than treated as definitive.
 
-## Author
+## 👨‍💻 Author
+
 Academic project on machine learning-based research abstract classification.
