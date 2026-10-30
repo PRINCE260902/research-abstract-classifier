@@ -1,12 +1,15 @@
 # Research Abstract Classifier
 
-A machine learning and Natural Language Processing (NLP) project that classifies research abstracts into **Science, Business, and Social Science** categories.
+A Machine Learning and Natural Language Processing (NLP) project that classifies research abstracts into **Science, Business, and Social Science** categories.
 
 ## 🚀 Live Demo
 
-**[Open the Research Abstract Classifier](https://research-abstract-classifier-prince-chauhan.streamlit.app/)**
+[**Open the Research Abstract Classifier**](https://research-abstract-classifier-prince-chauhan.streamlit.app/)
 
-Try the application online by entering a research abstract to predict its category and view the model's prediction scores.
+The application supports:
+- Entering a single research abstract and predicting its category.
+- Uploading a CSV file containing multiple research abstracts.
+- Downloading the CSV file with predicted categories and prediction scores.
 
 ## 📌 Project Overview
 
@@ -27,7 +30,7 @@ The dataset was collected using the OpenAlex API and filtered using keyword-base
 
 ## ⚙️ Methodology
 
-1. Collect research records using OpenAlex.
+1. Collect research records using the OpenAlex API.
 2. Clean and filter the abstracts.
 3. Convert text into numerical features using TF-IDF.
 4. Split the dataset into training and testing sets using an 80:20 split.
@@ -82,12 +85,33 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## 📁 Repository Files
+## 📁 Project Structure
 
-- `app.py` — Streamlit web application.
-- `requirements.txt` — Python dependencies.
-- `best_research_classifier.pkl` — Saved Random Forest model.
-- `tfidf_vectorizer.pkl` — Saved TF-IDF vectorizer.
+```text
+research-abstract-classifier/
+│
+├── notebooks/
+│   └── Research_Abstract_Classification.ipynb
+│
+├── data/
+│   ├── cleaned_research_abstracts.csv
+│   ├── flagged_records_for_review.csv
+│   ├── research_abstracts_raw.csv
+│   └── research_abstracts_for_review.csv
+│
+├── models/
+│   ├── best_research_classifier.pkl
+│   └── tfidf_vectorizer.pkl
+│
+├── results/
+│   ├── model_comparison.png
+│   ├── model_comparison_results.csv
+│   └── random_forest_classification_report.csv
+│
+├── app.py
+├── README.md
+└── requirements.txt
+```
 
 ## 🛠️ Technologies Used
 
@@ -108,4 +132,4 @@ streamlit run app.py
 
 ## 👨‍💻 Author
 
-Academic project on machine learning-based research abstract classification.
+Academic project on machine learning-based research abstract classification.lassification.
