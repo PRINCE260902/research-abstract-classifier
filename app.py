@@ -79,10 +79,13 @@ with tab_csv:
                 st.write("Preview of uploaded data:")
                 st.dataframe(input_df.head())
 
-                text_columns = [
-                    column for column in input_df.columns
-                    if input_df[column].dtype == "object"
-                ]
+               text_columns = [
+               column for column in input_df.columns
+                        if (
+                           pd.api.types.is_string_dtype(input_df[column])
+                      or input_df[column].dtype == "object"
+                           )
+                        ]
 
                 if not text_columns:
                     st.error(
