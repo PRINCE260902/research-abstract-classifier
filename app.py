@@ -1,3 +1,4 @@
+
 import streamlit as st
 import joblib
 import pandas as pd
@@ -12,6 +13,7 @@ st.set_page_config(
 
 # Load the saved model and TF-IDF vectorizer
 BASE_DIR = Path(__file__).parent
+
 
 @st.cache_resource
 def load_artifacts():
@@ -32,33 +34,55 @@ st.write(
     "using a trained machine-learning model."
 )
 
-tab_single, tab_csv = st.tabs(["Single abstract", "Upload CSV dataset"])
+tab_single, tab_csv = st.tabs(
+    ["Single abstract", "Upload CSV dataset"]
+)
+
+# --------------------------------------------------
+# TAB 1: SINGLE ABSTRACT PREDICTION
+# --------------------------------------------------
 
 with tab_single:
     st.subheader("Predict one research abstract")
+
     abstract_text = st.text_area(
         "Paste your research abstract below:",
         height=220,
         placeholder="Enter or paste the abstract here..."
     )
 
-    if st.button("Predict Category", type="primary", key="predict_single"):
+    if st.button(
+        "Predict Category",
+        type="primary",
+        key="predict_single"
+    ):
         if not abstract_text.strip():
             st.warning("Please enter an abstract first.")
         else:
             features = vectorizer.transform([abstract_text])
             prediction = model.predict(features)[0]
+
             st.success(f"Predicted Category: {prediction}")
 
             if hasattr(model, "predict_proba"):
                 probabilities = model.predict_proba(features)[0]
+
                 st.subheader("Model prediction scores")
-                for category, probability in zip(model.classes_, probabilities):
+
+                for category, probability in zip(
+                    model.classes_, probabilities
+                ):
                     st.write(f"**{category}:** {probability:.1%}")
                     st.progress(float(probability))
 
+
+# --------------------------------------------------
+# TAB 2: CSV BATCH PREDICTION
+# --------------------------------------------------
+
 with tab_csv:
     st.subheader("Upload a CSV file")
+
     st.write(
         "Upload a CSV containing a column of research abstracts. "
         "The app will predict a category for each non-empty abstract."
@@ -73,15 +97,22 @@ with tab_csv:
     if uploaded_file is not None:
         try:
             input_df = pd.read_csv(uploaded_file)
+
             if input_df.empty:
                 st.warning("The uploaded CSV is empty.")
+
             else:
                 st.write("Preview of uploaded data:")
                 st.dataframe(input_df.head())
 
-               text_columns = [
-                   column for column in input_df.columns
-                        if(pd.api.types.is_string_dtype(input_df[column]) or input_df[column].dtype == "object")
+                # Identify columns containing text
+                text_columns = [
+                    column
+                    for column in input_df.columns
+                    if (
+                        pd.api.types.is_string_dtype(input_df[column])
+                        or input_df[column].dtype == "object"
+                    )
                 ]
 
                 if not text_columns:
@@ -89,11 +120,33 @@ with tab_csv:
                         "No text column was found. Please upload a CSV "
                         "with a column containing research abstracts."
                     )
+
                 else:
-                    default_index = (
-                        text_columns.index("abstract")
-                        if "abstract" in text_columns else 0
+                    # Automatically select the abstract column if available
+                    normalized_columns = {
+                        str(column).strip().lower(): column
+                        for column in text_columns
+                    }
+
+                    preferred_names = [
+                        "abstract",
+                        "research_abstract",
+                        "research abstract",
+                        "text",
+                        "content"
+                    ]
+
+                    default_column = next(
+                        (
+                            normalized_columns[name]
+                            for name in preferred_names
+                            if name in normalized_columns
+                        ),
+                        text_columns[0]
                     )
+
+                    default_index = text_columns.index(default_column)
+
                     abstract_column = st.selectbox(
                         "Select the column containing research abstracts:",
                         options=text_columns,
@@ -106,26 +159,35 @@ with tab_csv:
                         key="predict_csv"
                     ):
                         result_df = input_df.copy()
+
                         abstract_series = (
                             result_df[abstract_column]
                             .fillna("")
                             .astype(str)
                             .str.strip()
                         )
+
                         valid_mask = abstract_series.ne("")
+
                         result_df["Predicted_Category"] = ""
 
                         if valid_mask.any():
                             features = vectorizer.transform(
                                 abstract_series[valid_mask].tolist()
                             )
+
                             result_df.loc[
                                 valid_mask, "Predicted_Category"
                             ] = model.predict(features)
 
                             if hasattr(model, "predict_proba"):
-                                probabilities = model.predict_proba(features)
-                                for index, category in enumerate(model.classes_):
+                                probabilities = model.predict_proba(
+                                    features
+                                )
+
+                                for index, category in enumerate(
+                                    model.classes_
+                                ):
                                     result_df.loc[
                                         valid_mask,
                                         f"Score_{category.replace(' ', '_')}"
@@ -135,9 +197,14 @@ with tab_csv:
                             f"Predictions completed for "
                             f"{int(valid_mask.sum())} non-empty abstracts."
                         )
+
                         st.dataframe(result_df.head(20))
 
-                        csv_bytes = result_df.to_csv(index=False).encode("utf-8")
+                        # Download predictions
+                        csv_bytes = result_df.to_csv(
+                            index=False
+                        ).encode("utf-8")
+
                         st.download_button(
                             "Download predictions CSV",
                             data=csv_bytes,
@@ -151,8 +218,15 @@ with tab_csv:
                 f"a valid CSV file. Details: {error}"
             )
 
+
+# --------------------------------------------------
+# FOOTER
+# --------------------------------------------------
+
 st.divider()
+
 st.caption(
     "Academic project — predictions depend on the training data "
     "and should be reviewed rather than treated as definitive."
 )
+
